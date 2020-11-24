@@ -73,7 +73,7 @@ game_state = [
     [[3, 1], [4]], # BISHOPS
     [[6, 1], [4]],
     [[4, 1], [5]], # QUEEN
-    [[5, 1], [6]], # KING
+    [[5, 1], [6]] # KING
 ]
 
 chPlayHuman(game_state)
