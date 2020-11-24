@@ -39,10 +39,11 @@ function chPlayHuman(game_state)
         [parse(Int64, play[5]), parse(Int64, play[7])]
     ]
 
-    if chIsValidPlay(game_state, [parsed_play[2][1], parsed_play[2][2]])
+    if chIsValidPlay(game_state, [parsed_play[2]])
         for i in game_state
             if i[1] == parsed_play[1]
-                i[1] = parsed_play[1]
+                i[1] = parsed_play[2]
+                println("UPDATED GAME STATE: ", i)
                 break
             end
         end
@@ -51,7 +52,28 @@ function chPlayHuman(game_state)
         chPlayHuman(game_state)
     end
 
+    return game_state
+
 end # function
 
-game_state = [[[1, 3], [1, true]]]
+game_state = [
+    # [[locX, locY], [ID]]
+    [[1, 2], [1, false]], # PAWNS
+    [[2, 2], [1, false]],
+    [[3, 2], [1, false]],
+    [[4, 2], [1, false]],
+    [[5, 2], [1, false]],
+    [[6, 2], [1, false]],
+    [[7, 2], [1, false]],
+    [[8, 2], [1, false]],
+    [[1, 1], [2]], # ROOKS
+    [[8, 1], [2]],
+    [[2, 1], [3]], # KNIGHTS
+    [[7, 1], [3]],
+    [[3, 1], [4]], # BISHOPS
+    [[6, 1], [4]],
+    [[4, 1], [5]], # QUEEN
+    [[5, 1], [6]], # KING
+]
+
 chPlayHuman(game_state)
