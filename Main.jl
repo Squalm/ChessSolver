@@ -29,7 +29,7 @@ function chIsValidPlay(game_state, piece_to)
 end # function
 
 # Read in a player's input into the code
-function chPlayHuman(game_state)
+function chPlayHuman(game_state, player)
 
     println("Format: CurrentCoordX,CurrentCoordY,ToCoordX,ToCoordY [no spaces!]")
     print("Make your play: ")
@@ -39,7 +39,7 @@ function chPlayHuman(game_state)
         [parse(Int64, play[5]), parse(Int64, play[7])]
     ]
 
-    if chIsValidPlay(game_state, [parsed_play[2]])
+    if chIsValidPlay(game_state, parsed_play, player)
         for i in game_state
             if i[1] == parsed_play[1]
                 i[1] = parsed_play[2]
@@ -93,4 +93,4 @@ game_state = [
     [[5, 8], [6], 2] # KING
 ]
 
-chPlayHuman(game_state)
+chPlayHuman(game_state, 1)
