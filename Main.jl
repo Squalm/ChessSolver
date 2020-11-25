@@ -5,12 +5,13 @@
 #   [Location, [PieceID, (Already moved, if pawn)]]
 # ]
 
-function chSearch(game_state)
+function chSearch(self, game_state)
 
 end # function
 
 # Get moves for any piece
-function chValidMoves(game_state, piece_location)
+# Computer always assumes it is on bottom
+function chMoves(game_state, piece)
 
     # Different numbers in the piece type indicate pieces
     # 1 -> Pawn - Extra info: Already moved [bool]
@@ -20,16 +21,38 @@ function chValidMoves(game_state, piece_location)
     # 5 -> Queen
     # 6 -> King
 
+    location = piece[1]
+    type = piece[2][1]
+
+    if type == 1
+
+        already_moved = piece[2][2]
+
+        if already_moved
+            valid = [[location[1], location[2] + 1]]
+        else
+            valid = [[location[1], location[2] + 1], [location[1], location[2] + 2]]
+        end
+
+    end
+
+    return valid
+
 end # function
 
-function chIsValidPlay(game_state, piece_to)
+function chIsValidPlay(game_state, play, player)
+
+    piece = [i for i in game_state if i[1] == play[1]]
+    println(piece)
+    valid_moves = chMoves(game_state, piece)
 
     return true
 
 end # function
 
 # Read in a player's input into the code
-function chPlayHuman(game_state, player)
+function chPlayHuman(game_state)
+    # Human is ALWAYS player 2
 
     println("Format: CurrentCoordX,CurrentCoordY,ToCoordX,ToCoordY [no spaces!]")
     print("Make your play: ")
@@ -39,17 +62,12 @@ function chPlayHuman(game_state, player)
         [parse(Int64, play[5]), parse(Int64, play[7])]
     ]
 
-    if chIsValidPlay(game_state, parsed_play, player)
-        for i in game_state
-            if i[1] == parsed_play[1]
-                i[1] = parsed_play[2]
-                println("UPDATED GAME STATE: ", i)
-                break
-            end
+    for i in game_state
+        if i[1] == parsed_play[1]
+            i[1] = parsed_play[2]
+            println("UPDATED GAME STATE: ", i)
+            break
         end
-    else
-        println("\nINVALID PLAY")
-        chPlayHuman(game_state)
     end
 
     return game_state
@@ -73,7 +91,7 @@ game_state = [
     [[3, 1], [4], 1], # BISHOPS
     [[6, 1], [4], 1],
     [[4, 1], [5], 1], # QUEEN
-    [[5, 1], [6], 1] # KING
+    [[5, 1], [6], 1], # KING
     # [[locX, locY], [ID]] # PLAYER 2
     [[1, 7], [1, false], 2], # PAWNS
     [[2, 7], [1, false], 2],
@@ -93,4 +111,4 @@ game_state = [
     [[5, 8], [6], 2] # KING
 ]
 
-chPlayHuman(game_state, 1)
+chPlayHuman(game_state)
