@@ -5,13 +5,13 @@
 #   [Location, [PieceID, (Already moved, if pawn)]]
 # ]
 
-function chSearch(self, game_state)
+function chSearch(game_state)
 
 end # function
 
-# Get moves for any piece
+# Get all POSSIBLE VALID moves the computer can make
 # Computer always assumes it is on bottom
-function chMoves(game_state, piece)
+function chMoves(game_state)
 
     # Different numbers in the piece type indicate pieces
     # 1 -> Pawn - Extra info: Already moved [bool]
@@ -21,26 +21,36 @@ function chMoves(game_state, piece)
     # 5 -> Queen
     # 6 -> King
 
-    location = piece[1]
-    type = piece[2][1]
+    moves = []
 
-    if type == 1
+    for piece in game_state
 
-        already_moved = piece[2][2]
+        location = piece[1]
+        type = piece[2][1]
 
-        if already_moved
-            valid = [[location[1], location[2] + 1]]
-        else
-            valid = [[location[1], location[2] + 1], [location[1], location[2] + 2]]
-        end
+        if type == 1
 
-    end
+            already_moved = piece[2][2]
+
+            moves[end + 1] = [location[1], location[2] + 1]
+            if !already_moved
+                moves[end + 1] = [location[1], location[2] + 2]
+            end
+
+        elseif type == 2
+
+            
+
+        end # if
+
+    end # for
+
 
     return valid
 
 end # function
 
-function chIsValidPlay(game_state, play, player)
+function chIsValidPlay(game_state, play)
 
     piece = [i for i in game_state if i[1] == play[1]]
     println(piece)
