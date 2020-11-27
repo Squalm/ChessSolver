@@ -44,67 +44,71 @@ function chMoves(game_state)
 
     for piece in game_state
 
-        location = piece[1]
-        type = piece[2][1]
+        if piece[3] == 1
 
-        if type == 1
+            location = piece[1]
+            type = piece[2][1]
 
-            already_moved = piece[2][2]
+            if type == 1
 
-            push!(moves, [location, [location[1], location[2] + 1]])
-            if already_moved == false
-                push!(moves, [location, [location[1], location[2] + 2]])
+                already_moved = piece[2][2]
+
+                push!(moves, [location, [location[1], location[2] + 1]])
+                if already_moved == false
+                    push!(moves, [location, [location[1], location[2] + 2]])
+                end # if
+
+            elseif type == 2
+
+                for i in 1:9
+                    push!(moves, [location, [i, location[2]]])
+                    push!(moves, [location, [location[1], i]])
+                end # for
+
+            elseif type == 3
+
+                push!(moves, [location, [location[1] + 1, location[2] + 2]])
+                push!(moves, [location, [location[1] - 1, location[2] + 2]])
+                push!(moves, [location, [location[1] + 1, location[2] - 2]])
+                push!(moves, [location, [location[1] - 1, location[2] - 2]])
+                push!(moves, [location, [location[1] + 2, location[2] + 1]])
+                push!(moves, [location, [location[1] + 2, location[2] - 1]])
+                push!(moves, [location, [location[1] - 2, location[2] + 1]])
+                push!(moves, [location, [location[1] - 2, location[2] - 1]])
+
+            elseif type == 4
+
+                for i in 1:9
+                    push!(moves, [location, [location[1] - i, location[2] - i]])
+                    push!(moves, [location, [location[1] + i, location[2] + i]])
+                end # for
+
+            elseif type == 5
+
+                # this is just all rook and bishop moves
+                for i in 1:9
+                    push!(moves, [location, [i, location[2]]])
+                    push!(moves, [location, [location[1], i]])
+                    push!(moves, [location, [location[1] - i, location[2] - i]])
+                    push!(moves, [location, [location[1] + i, location[2] + i]])
+                end # for
+
+            elseif type == 6
+
+                push!(moves, [location, [location[1] + 1, location[2]]])
+                push!(moves, [location, [location[1] - 1, location[2]]])
+                push!(moves, [location, [location[1] + 1, location[2] + 1]])
+                push!(moves, [location, [location[1] + 1, location[2] - 1]])
+                push!(moves, [location, [location[1] - 1, location[2] + 1]])
+                push!(moves, [location, [location[1] - 1, location[2] - 1]])
+                push!(moves, [location, [location[1], location[2] + 1]])
+                push!(moves, [location, [location[1], location[2] - 1]])
+
             end # if
 
-        elseif type == 2
+        end # for
 
-            for i in 1:9
-                push!(moves, [location, [i, location[2]]])
-                push!(moves, [location, [location[1], i]])
-            end # for
-
-        elseif type == 3
-
-            push!(moves, [location, [location[1] + 1, location[2] + 2]])
-            push!(moves, [location, [location[1] - 1, location[2] + 2]])
-            push!(moves, [location, [location[1] + 1, location[2] - 2]])
-            push!(moves, [location, [location[1] - 1, location[2] - 2]])
-            push!(moves, [location, [location[1] + 2, location[2] + 1]])
-            push!(moves, [location, [location[1] + 2, location[2] - 1]])
-            push!(moves, [location, [location[1] - 2, location[2] + 1]])
-            push!(moves, [location, [location[1] - 2, location[2] - 1]])
-
-        elseif type == 4
-
-            for i in 1:9
-                push!(moves, [location, [location[1] - i, location[2] - i]])
-                push!(moves, [location, [location[1] + i, location[2] + i]])
-            end # for
-
-        elseif type == 5
-
-            # this is just all rook and bishop moves
-            for i in 1:9
-                push!(moves, [location, [i, location[2]]])
-                push!(moves, [location, [location[1], i]])
-                push!(moves, [location, [location[1] - i, location[2] - i]])
-                push!(moves, [location, [location[1] + i, location[2] + i]])
-            end # for
-
-        elseif type == 6
-
-            push!(moves, [location, [location[1] + 1, location[2]]])
-            push!(moves, [location, [location[1] - 1, location[2]]])
-            push!(moves, [location, [location[1] + 1, location[2] + 1]])
-            push!(moves, [location, [location[1] + 1, location[2] - 1]])
-            push!(moves, [location, [location[1] - 1, location[2] + 1]])
-            push!(moves, [location, [location[1] - 1, location[2] - 1]])
-            push!(moves, [location, [location[1], location[2] + 1]])
-            push!(moves, [location, [location[1], location[2] - 1]])
-
-        end # if
-
-    end # for
+    end # if
 
     # println(moves)
     # validBool = chIsValidPlay.(game_state, moves)
@@ -122,9 +126,39 @@ function chIsValidPlay(game_state::Array, play::Array{Array{Int64, 1}, 1})
     is_valid = true
 
     # check in bounds
+    if play[1][1] > 8 || play[1][1] < 1
+        is_valid = false
+    end # if
+
     # check not going through other pieces (if not knight)
+    # check not on top of another piece of same colour
 
     return is_valid
+
+end # function
+
+function chShowBoard(game_state)
+
+    println("\nCurrent State: ")
+
+    for y in 1:8
+        for x in 1:8
+            player = 0
+            for piece in game_state
+                if piece[1] == [x, y]
+                    player = piece[3]
+                end # if
+            end # for
+            if player == 1
+                print("X ")
+            elseif player == 2
+                print("O ")
+            else
+                print("- ")
+            end # if
+        end # for
+        println()
+    end # for
 
 end # function
 
@@ -190,4 +224,5 @@ game_state = [
 ]
 
 println("BOOP")
-chMoves(game_state)
+chShowBoard(game_state)
+# chMoves(game_state)
