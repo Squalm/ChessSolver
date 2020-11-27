@@ -9,6 +9,23 @@ function chSearch(game_state)
 
 end # function
 
+# Computer make play
+# This will also resolve the game_state when called finally
+function chMakePlay(game_state, play)
+
+end # function
+
+# Run one turn for computer
+function chResolve(game_state)
+
+end # function
+
+# RUN THE ENTIRE GAME
+# Note how this takes game_state allowing for other starting conditions
+function chRunGame(game_state)
+
+end # function
+
 # Get all POSSIBLE VALID moves the computer can make
 # Computer always assumes it is on bottom
 function chMoves(game_state)
@@ -23,6 +40,8 @@ function chMoves(game_state)
 
     moves = []
 
+    # Get all possible (not necessarily valid moves)
+
     for piece in game_state
 
         location = piece[1]
@@ -32,14 +51,56 @@ function chMoves(game_state)
 
             already_moved = piece[2][2]
 
-            moves[end + 1] = [location[1], location[2] + 1]
+            moves[end + 1] = [location, [location[1], location[2] + 1]]
             if !already_moved
-                moves[end + 1] = [location[1], location[2] + 2]
-            end
+                moves[end + 1] = [location, [location[1], location[2] + 2]]
+            end # if
 
         elseif type == 2
 
-            
+            for i in 1:9
+                moves[end + 1] = [location, [i, location[2]]]
+                moves[end + 1] = [location, [location[1], i]]
+            end # for
+
+        elseif type == 3
+
+            moves[end + 1] = [location, [location[1] + 1, location[2] + 2]]
+            moves[end + 1] = [location, [location[1] - 1, location[2] + 2]]
+            moves[end + 1] = [location, [location[1] + 1, location[2] - 2]]
+            moves[end + 1] = [location, [location[1] - 1, location[2] - 2]]
+            moves[end + 1] = [location, [location[1] + 2, location[2] + 1]]
+            moves[end + 1] = [location, [location[1] + 2, location[2] - 1]]
+            moves[end + 1] = [location, [location[1] - 2, location[2] + 1]]
+            moves[end + 1] = [location, [location[1] - 2, location[2] - 1]]
+
+        elseif type == 4
+
+            for i in 1:9
+                moves[end + 1] = [location, [location[1] - i, location[2] - i]]
+                moves[end + 1] = [location, [location[1] + i, location[2] + i]]
+            end # for
+
+        elseif type == 5
+
+            # this is just all rook and bishop moves
+            for i in 1:9
+                moves[end + 1] = [location, [i, location[2]]]
+                moves[end + 1] = [location, [location[1], i]]
+                moves[end + 1] = [location, [location[1] - i, location[2] - i]]
+                moves[end + 1] = [location, [location[1] + i, location[2] + i]]
+            end # for
+
+        elseif type == 6
+
+            moves[end + 1] = [location, [location[1] + 1, location[2]]]
+            moves[end + 1] = [location, [location[1] - 1, location[2]]]
+            moves[end + 1] = [location, [location[1] + 1, location[2] + 1]]
+            moves[end + 1] = [location, [location[1] + 1, location[2] - 1]]
+            moves[end + 1] = [location, [location[1] - 1, location[2] + 1]]
+            moves[end + 1] = [location, [location[1] - 1, location[2] - 1]]
+            moves[end + 1] = [location, [location[1], location[2] + 1]]
+            moves[end + 1] = [location, [location[1], location[2] - 1]]
 
         end # if
 
@@ -53,10 +114,12 @@ end # function
 function chIsValidPlay(game_state, play)
 
     piece = [i for i in game_state if i[1] == play[1]]
-    println(piece)
-    valid_moves = chMoves(game_state, piece)
+    is_valid = true
 
-    return true
+    # check in bounds
+    # check not going through other pieces (if not knight)
+
+    return is_valid
 
 end # function
 
