@@ -51,67 +51,71 @@ function chMoves(game_state)
 
             already_moved = piece[2][2]
 
-            moves[end + 1] = [location, [location[1], location[2] + 1]]
-            if !already_moved
-                moves[end + 1] = [location, [location[1], location[2] + 2]]
+            push!(moves, [location, [location[1], location[2] + 1]])
+            if already_moved == false
+                push!(moves, [location, [location[1], location[2] + 2]])
             end # if
 
         elseif type == 2
 
             for i in 1:9
-                moves[end + 1] = [location, [i, location[2]]]
-                moves[end + 1] = [location, [location[1], i]]
+                push!(moves, [location, [i, location[2]]])
+                push!(moves, [location, [location[1], i]])
             end # for
 
         elseif type == 3
 
-            moves[end + 1] = [location, [location[1] + 1, location[2] + 2]]
-            moves[end + 1] = [location, [location[1] - 1, location[2] + 2]]
-            moves[end + 1] = [location, [location[1] + 1, location[2] - 2]]
-            moves[end + 1] = [location, [location[1] - 1, location[2] - 2]]
-            moves[end + 1] = [location, [location[1] + 2, location[2] + 1]]
-            moves[end + 1] = [location, [location[1] + 2, location[2] - 1]]
-            moves[end + 1] = [location, [location[1] - 2, location[2] + 1]]
-            moves[end + 1] = [location, [location[1] - 2, location[2] - 1]]
+            push!(moves, [location, [location[1] + 1, location[2] + 2]])
+            push!(moves, [location, [location[1] - 1, location[2] + 2]])
+            push!(moves, [location, [location[1] + 1, location[2] - 2]])
+            push!(moves, [location, [location[1] - 1, location[2] - 2]])
+            push!(moves, [location, [location[1] + 2, location[2] + 1]])
+            push!(moves, [location, [location[1] + 2, location[2] - 1]])
+            push!(moves, [location, [location[1] - 2, location[2] + 1]])
+            push!(moves, [location, [location[1] - 2, location[2] - 1]])
 
         elseif type == 4
 
             for i in 1:9
-                moves[end + 1] = [location, [location[1] - i, location[2] - i]]
-                moves[end + 1] = [location, [location[1] + i, location[2] + i]]
+                push!(moves, [location, [location[1] - i, location[2] - i]])
+                push!(moves, [location, [location[1] + i, location[2] + i]])
             end # for
 
         elseif type == 5
 
             # this is just all rook and bishop moves
             for i in 1:9
-                moves[end + 1] = [location, [i, location[2]]]
-                moves[end + 1] = [location, [location[1], i]]
-                moves[end + 1] = [location, [location[1] - i, location[2] - i]]
-                moves[end + 1] = [location, [location[1] + i, location[2] + i]]
+                push!(moves, [location, [i, location[2]]])
+                push!(moves, [location, [location[1], i]])
+                push!(moves, [location, [location[1] - i, location[2] - i]])
+                push!(moves, [location, [location[1] + i, location[2] + i]])
             end # for
 
         elseif type == 6
 
-            moves[end + 1] = [location, [location[1] + 1, location[2]]]
-            moves[end + 1] = [location, [location[1] - 1, location[2]]]
-            moves[end + 1] = [location, [location[1] + 1, location[2] + 1]]
-            moves[end + 1] = [location, [location[1] + 1, location[2] - 1]]
-            moves[end + 1] = [location, [location[1] - 1, location[2] + 1]]
-            moves[end + 1] = [location, [location[1] - 1, location[2] - 1]]
-            moves[end + 1] = [location, [location[1], location[2] + 1]]
-            moves[end + 1] = [location, [location[1], location[2] - 1]]
+            push!(moves, [location, [location[1] + 1, location[2]]])
+            push!(moves, [location, [location[1] - 1, location[2]]])
+            push!(moves, [location, [location[1] + 1, location[2] + 1]])
+            push!(moves, [location, [location[1] + 1, location[2] - 1]])
+            push!(moves, [location, [location[1] - 1, location[2] + 1]])
+            push!(moves, [location, [location[1] - 1, location[2] - 1]])
+            push!(moves, [location, [location[1], location[2] + 1]])
+            push!(moves, [location, [location[1], location[2] - 1]])
 
         end # if
 
     end # for
 
+    # println(moves)
+    # validBool = chIsValidPlay.(game_state, moves)
+    valid_bool = [chIsValidPlay(game_state, i) for i in moves]
+    println(valid_bool)
 
     return valid
 
 end # function
 
-function chIsValidPlay(game_state, play)
+function chIsValidPlay(game_state::Array, play::Array{Array{Int64, 1}, 1})
 
     piece = [i for i in game_state if i[1] == play[1]]
     is_valid = true
@@ -184,4 +188,5 @@ game_state = [
     [[5, 8], [6], 2] # KING
 ]
 
-chPlayHuman(game_state)
+println("BOOP")
+chMoves(game_state)
