@@ -109,7 +109,8 @@ function chMoves(game_state)
     # println(moves)
     # validBool = chIsValidPlay.(game_state, moves)
     valid_bool = [chIsValidPlay(game_state, i) for i in moves]
-    println(valid_bool)
+    valid = [moves[i] for i in range(1, length = length(moves)) if valid_bool[i]]
+    println(valid)
 
     return valid
 
