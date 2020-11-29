@@ -8,11 +8,24 @@
 # REMAIN VIGILANTLY AWARE OF ARGUMENT PASSING BEHAVIOR
 function chSearch(game_state::Array)
 
+
+
 end # function
 
 # Computer make play
 # This will also resolve the game_state when called finally
 function chMakePlay(game_state::Array, play::Array{Array{Int64, 1}, 1})
+
+    for piece in game_state
+
+        if piece[1] == play[1]
+            piece[1] = play[2]
+            break
+        end # if
+
+    end # for
+
+    return game_state
 
 end # function
 
@@ -52,7 +65,7 @@ end # function
 # Checks if in check or in checkmate
 function chCheck(game_state::Array)
 
-    return [false, false]
+    return [0, 0]
 
 end # function
 
