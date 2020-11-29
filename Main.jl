@@ -8,7 +8,22 @@
 # REMAIN VIGILANTLY AWARE OF ARGUMENT PASSING BEHAVIOR
 function chSearch(game_state::Array)
 
+    moves = chMoves(game_state)
+    for move in moves
+        new_state = chMakePlay(game_state, move)
+        # If human is in check in the scenario, this is an optimal move
+        if chCheck(new_state)[2] == 2
 
+            return move
+
+        else
+
+            if chCheck
+            copy_state = deepcopy(new_state)
+            optimal_move = chSearch(copy_state)
+
+        end # if
+    end # for
 
 end # function
 
@@ -62,7 +77,7 @@ function chRunGame(game_state::Array)
 
 end # function
 
-# Checks if in check or in checkmate
+# Checks if in check or in checkmate -- IMPORTANT
 function chCheck(game_state::Array)
 
     return [0, 0]
@@ -71,6 +86,7 @@ end # function
 
 # Get all POSSIBLE VALID moves the computer can make
 # Computer always assumes it is on bottom
+# NEED TO IMPLEMENT SYSTEM FOR FINDING ALL HUMAN MOVES
 function chMoves(game_state::Array)
 
     # Different numbers in the piece type indicate pieces
