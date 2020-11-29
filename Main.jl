@@ -111,10 +111,7 @@ function chMoves(game_state)
 
     end # if
 
-    # println(moves)
-    # validBool = chIsValidPlay.(game_state, moves)
-    valid_bool = [chIsValidPlay(game_state, i) for i in moves]
-    println(valid_bool)
+    valid_bool = [chIsValidPlay(game_state, move) for move in moves]
     valid = [moves[i] for i in range(1, length = length(moves)) if valid_bool[i]]
     println(valid)
 
@@ -125,6 +122,7 @@ end # function
 function chIsValidPlay(game_state::Array, play::Array{Array{Int64, 1}, 1})
 
     piece = [i for i in game_state if i[1] == play[1]]
+    piece = piece[1]
     is_valid = true
 
     # check in bounds
@@ -135,18 +133,30 @@ function chIsValidPlay(game_state::Array, play::Array{Array{Int64, 1}, 1})
     elseif piece[2][1] != 3 # check not going through other pieces (if not knight)
 
         points = chGetPointsBetween(play)
-        for piece in game_state
-            for point in points
 
-                if point == piece[1]
+        if length(points) == 0
+            is_valid = false
+        else
 
-                    is_valid = false
+            for piece in game_state
+                for point in points
+                    if point == piece[1]
 
-                end # if
+                        is_valid = false
+
+                    end # if
+                end # for
             end # for
-        end # for
+
+        end # if
 
     end # if
+
+    for piece in game_state
+        if piece[1] == play[2] && piece[3] == 1 # check piece landing on is not on my side
+            is_valid = false
+        end # if
+    end # for
 
     return is_valid
 
@@ -262,6 +272,6 @@ game_state = [
     [[5, 8], [6], 2] # KING
 ]
 
-println("BOOP")
+println("BEEP BOOP")
 # chShowBoard(game_state)
-# chMoves(game_state)
+chMoves(game_state)
