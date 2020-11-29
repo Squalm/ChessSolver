@@ -6,30 +6,59 @@
 # ]
 
 # REMAIN VIGILANTLY AWARE OF ARGUMENT PASSING BEHAVIOR
-function chSearch(game_state)
+function chSearch(game_state::Array)
 
 end # function
 
 # Computer make play
 # This will also resolve the game_state when called finally
-function chMakePlay(game_state, play)
+function chMakePlay(game_state::Array, play::Array{Array{Int64, 1}, 1})
 
 end # function
 
 # Run one turn for computer
-function chResolve(game_state)
+function chResolve(game_state::Array)
+
+    copy_state = deepcopy(game_state)
+    optimal_move = chSearch(copy_state)
+
+    new_state = chMakePlay(game_state, optimal_move)
+
+    return new_state
 
 end # function
 
 # RUN THE ENTIRE GAME
 # Note how this takes game_state allowing for other starting conditions
-function chRunGame(game_state)
+function chRunGame(game_state::Array)
+
+    is_alive = true
+    while is_alive
+
+        new_state = chResolve(game_state)
+
+        chShowBoard(new_state)
+
+        new_state = chPlayHuman(new_state)
+
+        chShowBoard(new_state)
+
+        game_state = new_state
+
+    end # while
+
+end # function
+
+# Checks if in check or in checkmate
+function chCheck(game_state::Array)
+
+    return [false, false]
 
 end # function
 
 # Get all POSSIBLE VALID moves the computer can make
 # Computer always assumes it is on bottom
-function chMoves(game_state)
+function chMoves(game_state::Array)
 
     # Different numbers in the piece type indicate pieces
     # 1 -> Pawn - Extra info: Already moved [bool]
@@ -186,6 +215,7 @@ function chGetPointsBetween(play::Array{Array{Int64, 1}, 1})
 
 end # function
 
+# Fun little visual representation of the board
 function chShowBoard(game_state)
 
     println("\nCurrent State: ")
