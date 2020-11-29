@@ -5,6 +5,7 @@
 #   [Location, [PieceID, (Already moved, if pawn)]]
 # ]
 
+# REMAIN VIGILANTLY AWARE OF ARGUMENT PASSING BEHAVIOR
 function chSearch(game_state)
 
 end # function
@@ -60,7 +61,7 @@ function chMoves(game_state)
 
             elseif type == 2
 
-                for i in 1:9
+                for i in 1:8
                     push!(moves, [location, [i, location[2]]])
                     push!(moves, [location, [location[1], i]])
                 end # for
@@ -78,7 +79,7 @@ function chMoves(game_state)
 
             elseif type == 4
 
-                for i in 1:9
+                for i in 1:8
                     push!(moves, [location, [location[1] - i, location[2] - i]])
                     push!(moves, [location, [location[1] + i, location[2] + i]])
                 end # for
@@ -86,7 +87,7 @@ function chMoves(game_state)
             elseif type == 5
 
                 # this is just all rook and bishop moves
-                for i in 1:9
+                for i in 1:8
                     push!(moves, [location, [i, location[2]]])
                     push!(moves, [location, [location[1], i]])
                     push!(moves, [location, [location[1] - i, location[2] - i]])
@@ -113,6 +114,7 @@ function chMoves(game_state)
     # println(moves)
     # validBool = chIsValidPlay.(game_state, moves)
     valid_bool = [chIsValidPlay(game_state, i) for i in moves]
+    println(valid_bool)
     valid = [moves[i] for i in range(1, length = length(moves)) if valid_bool[i]]
     println(valid)
 
@@ -126,14 +128,51 @@ function chIsValidPlay(game_state::Array, play::Array{Array{Int64, 1}, 1})
     is_valid = true
 
     # check in bounds
-    if play[1][1] > 8 || play[1][1] < 1
+    if play[2][1] > 8 || play[2][1] < 1 || play[2][2] > 8 || play[2][2] < 1
+
         is_valid = false
+
+    elseif piece[2][1] != 3 # check not going through other pieces (if not knight)
+
+        points = chGetPointsBetween(play)
+        for piece in game_state
+            for point in points
+
+                if point == piece[1]
+
+                    is_valid = false
+
+                end # if
+            end # for
+        end # for
+
     end # if
 
-    # check not going through other pieces (if not knight)
-    # check not on top of another piece of same colour
-
     return is_valid
+
+end # function
+
+function chGetPointsBetween(play::Array{Array{Int64, 1}, 1})
+
+    diff_x = play[2][1] - play[1][1]
+    diff_y = play[2][2] - play[1][2]
+
+    points = []
+    if diff_x != 0
+        for i in 1:abs(diff_x)
+
+            push!(points, [play[1][1] + sign(diff_x) * i, play[1][2] + sign(diff_y) * i])
+
+        end # for
+    elseif diff_y != 0
+        for i in 1:abs(diff_y)
+
+            push!(points, [play[1][1] + sign(diff_x) * i, play[1][2] + sign(diff_y) * i])
+
+        end # for
+    end # if
+
+    return points
 
 end # function
 
@@ -224,5 +263,5 @@ game_state = [
 ]
 
 println("BOOP")
-chShowBoard(game_state)
+# chShowBoard(game_state)
 # chMoves(game_state)
