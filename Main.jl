@@ -80,7 +80,11 @@ end # function
 # Checks if in check or in checkmate -- IMPORTANT
 function chCheck(game_state::Array)
 
-    return [0, 0]
+    in_check = [0, 0]
+
+    kings = [i for i in game_state if i[2][1] == 6]
+
+    return in_check
 
 end # function
 
@@ -174,6 +178,25 @@ function chMoves(game_state::Array)
     println(valid)
 
     return valid
+
+end # function
+
+function chFlipBoard(game_state::Array)
+
+    flip_state = deepcopy(game_state)
+    for piece in flip_state
+        piece[1][2] = 9 - piece[1][2]
+        piece[3] += 2
+    end # for
+    for piece in flip_state
+        if piece[3] == 3
+            piece[3] = 2
+        else
+            piece[3] = 1
+        end # if
+    end # for
+
+    return flip_state
 
 end # function
 
