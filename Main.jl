@@ -125,7 +125,6 @@ function chTake!(game_state::Array, loc::Array{Int64, 1})
 
 end # function
 
-# Checks if in check or in checkmate -- IMPORTANT
 """
     chCheck(game_state::Array)
 
@@ -413,6 +412,7 @@ function chPlayHuman!(game_state::Array)
 
 end # function
 
+# Initial state in Chess!
 game_state = [
     # [[locX, locY], [ID]] # PLAYER 1
     [[1, 2], [1, false], 1], # PAWNS
