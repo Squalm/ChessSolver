@@ -117,7 +117,7 @@ This should be used before updating the game_state with a piece move.
 """
 function chTake!(game_state::Array, loc::Array{Int64, 1})
 
-    for piece in range(1, length = length(game_state)
+    for piece in range(1, length = length(game_state))
         if game_state[piece][1] == loc
             pop!(game_state, piece)
         end # if
