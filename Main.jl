@@ -3,8 +3,8 @@
 
 --- INCOMPLETE ---\n
 Recursive search to find the optimal move.
-This MODIFIES game_state so you should pass a deepcopy of game_state.
-(The name is not chSearch! because it returns an optimal move not a game_state)
+This MODIFIES `game_state` so you should pass a deepcopy of `game_state`.
+(The name is not `chSearch!` because it returns an optimal move not a `game_state`)
 """
 function chSearch(game_state::Array)
 
@@ -31,8 +31,8 @@ end # function
 """
     chMakePlay(game_state::Array, play::Array{Array{Int64, 1}})
 
-This function modifies the game_state for when the computer makes a play.
-It can be used to modify the game_state once the optimal move is found.
+This function modifies the `game_state` for when the computer makes a play.
+It can be used to modify the `game_state` once the optimal move is found.
 chMakePlay() uses chTake! so it doesn't need to be used elsewhere.
 """
 function chMakePlay(game_state::Array, play::Array{Array{Int64, 1}, 1})
@@ -74,7 +74,7 @@ end # function
 
 --- INCOMPLETE ---\n
 This runs the entire game assuming the computer goes first.
-chRunGame() takes a game_state so that we can start from any state
+`chRunGame()` takes a game_state so that we can start from any state
 (e.g. where the human is white)
 """
 function chRunGame(game_state::Array)
@@ -94,13 +94,15 @@ function chRunGame(game_state::Array)
 
     end # while
 
+    return nothing
+
 end # function
 
 """
     chTake!(game_state::Array, loc::Array{Int64, 1})
 
 Remove a piece at a location from the game.
-This should be used before updating the game_state with a piece move.
+This should be used before updating the `game_state` with a piece move.
 """
 function chTake!(game_state::Array, loc::Array{Int64, 1})
 
@@ -110,15 +112,17 @@ function chTake!(game_state::Array, loc::Array{Int64, 1})
         end # if
     end # for
 
+    return nothing
+
 end # function
 
 """
     chCheck(game_state::Array)
 
 --- INCOMPLETE ---\n
-This checks if each player is in check (returns 1), or checkmate (returns 2)
-Returns an Array{Int64, 1} containing the state for each player.
-E.g. [0 (player 1 not in check), 2 (player 2 checkmate)]
+This checks if each player is in check (returns `1`), or checkmate (returns `2`)
+Returns an `Array{Int64, 1}` containing the state for each player.
+E.g. `[0 #== player 1 not in check ==#, 2 #== player 2 checkmate ==#]`
 """
 function chCheck(game_state::Array)
 
@@ -130,25 +134,23 @@ end # function
     chFlip!(game_state::Array)
 
 Modifies game_state to be as if player 1 were player 2 with the piece locations flipped vertically.
-Deepcopy game_state before running if you wish to preserve the previous state.
+Deepcopy `game_state` before running if you wish to preserve the previous state.
 """
 function chFlip!(game_state::Array)
 
     for piece in game_state
         piece[1][2] = 9 - piece[1][2]
-        if piece[3] == 1
-            piece[3] = 2
-        else
-            piece[3] = 1
-        end # if
+        piece[3] = 3 - piece[3]
     end # for
+
+    return nothing
 
 end # function
 
 """
     chFlip!(moves::Array{Array{Int64, 1}})
 
-Flips every the vertical element of each move.
+Flips every the vertical element of each move in `moves`.
 """
 function chFlip!(moves::Array{Array{Int64, 1}})
 
@@ -156,6 +158,8 @@ function chFlip!(moves::Array{Array{Int64, 1}})
         move[1][2] = 9 - move[1][2]
         move[2][2] = 9 - move[2][2]
     end # for
+
+    return nothing
 
 end # function
 
@@ -257,11 +261,11 @@ end # function
 """
     chIsValidPlay(game_state, play)
 
-This checks a specific to see if its valid given the current game_state.
+This checks a specific to see if its valid given the current `game_state`.
 This check the following:
 In bounds (1 - 8),
 Not going through other pieces (except when a knight),
-That the piece being landed on is not the same colour as piece it is.
+That the piece being landed on is not white.
 """
 function chIsValidPlay(game_state::Array, play::Array{Array{Int64, 1}, 1})
 
@@ -311,7 +315,7 @@ end # function
 
 Gets the points between two points as per movement in chess,
 i.e. along diagonals.
-N/A when a knight
+N/A when a knight.
 """
 function chGetPointsBetween(play::Array{Array{Int64, 1}, 1})
 
@@ -342,7 +346,7 @@ end # function
 
 Displays a visualisation of the board.
 Doesn't discriminate between piece types but does for each player.
-Board is flipped vertically in display (y increases as you move down).
+Board is flipped vertically in display (`y` increases as you move down).
 """
 function chShowBoard(game_state::Array)
 
@@ -374,7 +378,7 @@ end # function
 
 Takes a play from a human and parses it.
 We assume the player makes legal plays (so we don't chekc it's valid).
-This does not return anything, just modifies game_state
+This returns `nothing`, just modifies `game_state`.
 """
 function chPlayHuman!(game_state::Array)
     # Human is ALWAYS player 2
@@ -396,6 +400,8 @@ function chPlayHuman!(game_state::Array)
             break
         end
     end
+
+    return nothing
 
 end # function
 
