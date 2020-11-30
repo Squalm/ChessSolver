@@ -18,9 +18,10 @@ function chSearch(game_state::Array)
 
         else
 
-            if chCheck
-            copy_state = deepcopy(new_state)
-            optimal_move = chSearch(copy_state)
+            # human's turn
+            flip_state = deepcopy(new_state)
+            chFlip!(flip_state)
+            human_moves = chMoves(flip_state)
 
         end # if
     end # for
@@ -30,6 +31,8 @@ end # function
 # Computer make play
 # This will also resolve the game_state when called finally
 function chMakePlay(game_state::Array, play::Array{Array{Int64, 1}, 1})
+
+    chTake!(game_state, play[2])
 
     for piece in game_state
 
@@ -77,14 +80,33 @@ function chRunGame(game_state::Array)
 
 end # function
 
+function chTake!(game_state::Array, loc::Array{Int64, 1})
+
+    for piece in range(1, length = length(game_state)
+        if game_state[piece][1] == loc
+            pop!(game_state, piece)
+        end # if
+    end # for
+
+end # function
+
 # Checks if in check or in checkmate -- IMPORTANT
 function chCheck(game_state::Array)
 
-    in_check = [0, 0]
+    return [0, 0]
 
-    kings = [i for i in game_state if i[2][1] == 6]
+end # function
 
-    return in_check
+function chFlip!(game_state::Array)
+
+    for piece in game_state
+        piece[1][2] = 9 - piece[1][2]
+        if piece[3] == 1
+            piece[3] = 2
+        else
+            piece[3] = 1
+        end # if
+    end # for
 
 end # function
 
@@ -178,25 +200,6 @@ function chMoves(game_state::Array)
     println(valid)
 
     return valid
-
-end # function
-
-function chFlipBoard(game_state::Array)
-
-    flip_state = deepcopy(game_state)
-    for piece in flip_state
-        piece[1][2] = 9 - piece[1][2]
-        piece[3] += 2
-    end # for
-    for piece in flip_state
-        if piece[3] == 3
-            piece[3] = 2
-        else
-            piece[3] = 1
-        end # if
-    end # for
-
-    return flip_state
 
 end # function
 
@@ -304,6 +307,8 @@ function chPlayHuman(game_state)
         [parse(Int64, play[1]), parse(Int64, play[3])],
         [parse(Int64, play[5]), parse(Int64, play[7])]
     ]
+
+    chTake!(game_state, parsed_play[2])
 
     for i in game_state
         if i[1] == parsed_play[1]
