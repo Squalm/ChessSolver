@@ -1,22 +1,7 @@
-### Main bits of a game
-
-# Game state structure
-# game_state = [
-#   [Location, [PieceID, (Already moved, if pawn)]]
-# ]
-
-"""
-    name(args)
-
-documentation
-"""
-function name(args)
-    body
-end
-
 """
     chSearch(game_state::Array)
 
+--- INCOMPLETE ---\n
 Recursive search to find the optimal move.
 This MODIFIES game_state so you should pass a deepcopy of game_state.
 (The name is not chSearch! because it returns an optimal move not a game_state)
@@ -70,6 +55,7 @@ end # function
 """
     chResolve(game_state::Array)
 
+--- INCOMPLETE ---\n
 This runs one entire turn for the computer.
 """
 function chResolve(game_state::Array)
@@ -86,6 +72,7 @@ end # function
 """
     chRunGame(game_state::Array)
 
+--- INCOMPLETE ---\n
 This runs the entire game assuming the computer goes first.
 chRunGame() takes a game_state so that we can start from any state
 (e.g. where the human is white)
@@ -128,7 +115,7 @@ end # function
 """
     chCheck(game_state::Array)
 
---- INCOMPLETE ---
+--- INCOMPLETE ---\n
 This checks if each player is in check (returns 1), or checkmate (returns 2)
 Returns an Array{Int64, 1} containing the state for each player.
 E.g. [0 (player 1 not in check), 2 (player 2 checkmate)]
@@ -354,7 +341,7 @@ end # function
     chShowBoard(game_state::Array)
 
 Displays a visualisation of the board.
-Doesn't discriminate between piece types but for each player.
+Doesn't discriminate between piece types but does for each player.
 Board is flipped vertically in display (y increases as you move down).
 """
 function chShowBoard(game_state::Array)
