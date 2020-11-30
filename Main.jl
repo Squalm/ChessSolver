@@ -110,6 +110,15 @@ function chFlip!(game_state::Array)
 
 end # function
 
+function chFlip!(moves::Array{Array{Int64, 1}})
+
+    for move in moves
+        move[1][2] = 9 - move[1][2]
+        move[2][2] = 9 - move[2][2]
+    end # for
+
+end # function
+
 # Get all POSSIBLE VALID moves the computer can make
 # Computer always assumes it is on bottom
 # NEED TO IMPLEMENT SYSTEM FOR FINDING ALL HUMAN MOVES
