@@ -5,7 +5,22 @@
 #   [Location, [PieceID, (Already moved, if pawn)]]
 # ]
 
-# REMAIN VIGILANTLY AWARE OF ARGUMENT PASSING BEHAVIOR
+"""
+    name(args)
+
+documentation
+"""
+function name(args)
+    body
+end
+
+"""
+    chSearch(game_state::Array)
+
+Recursive search to find the optimal move.
+This MODIFIES game_state so you should pass a deepcopy of game_state.
+(The name is not chSearch! because it returns an optimal move not a game_state)
+"""
 function chSearch(game_state::Array)
 
     moves = chMoves(game_state)
@@ -28,8 +43,13 @@ function chSearch(game_state::Array)
 
 end # function
 
-# Computer make play
-# This will also resolve the game_state when called finally
+"""
+    chMakePlay(game_state::Array, play::Array{Array{Int64, 1}})
+
+This function modifies the game_state for when the computer makes a play.
+It can be used to modify the game_state once the optimal move is found.
+chMakePlay() uses chTake! so it doesn't need to be used elsewhere.
+"""
 function chMakePlay(game_state::Array, play::Array{Array{Int64, 1}, 1})
 
     chTake!(game_state, play[2])
@@ -47,7 +67,11 @@ function chMakePlay(game_state::Array, play::Array{Array{Int64, 1}, 1})
 
 end # function
 
-# Run one turn for computer
+"""
+    chResolve(game_state::Array)
+
+This runs one entire turn for the computer.
+"""
 function chResolve(game_state::Array)
 
     copy_state = deepcopy(game_state)
@@ -59,8 +83,13 @@ function chResolve(game_state::Array)
 
 end # function
 
-# RUN THE ENTIRE GAME
-# Note how this takes game_state allowing for other starting conditions
+"""
+    chRunGame(game_state::Array)
+
+This runs the entire game assuming the computer goes first.
+chRunGame() takes a game_state so that we can start from any state
+(e.g. where the human is white)
+"""
 function chRunGame(game_state::Array)
 
     is_alive = true
@@ -70,7 +99,7 @@ function chRunGame(game_state::Array)
 
         chShowBoard(new_state)
 
-        new_state = chPlayHuman(new_state)
+        chPlayHuman!(new_state)
 
         chShowBoard(new_state)
 
@@ -80,6 +109,12 @@ function chRunGame(game_state::Array)
 
 end # function
 
+"""
+    chTake!(game_state::Array, loc::Array{Int64, 1})
+
+Remove a piece at a location from the game.
+This should be used before updating the game_state with a piece move.
+"""
 function chTake!(game_state::Array, loc::Array{Int64, 1})
 
     for piece in range(1, length = length(game_state)
@@ -91,12 +126,26 @@ function chTake!(game_state::Array, loc::Array{Int64, 1})
 end # function
 
 # Checks if in check or in checkmate -- IMPORTANT
+"""
+    chCheck(game_state::Array)
+
+--- INCOMPLETE ---
+This checks if each player is in check (returns 1), or checkmate (returns 2)
+Returns an Array{Int64, 1} containing the state for each player.
+E.g. [0 (player 1 not in check), 2 (player 2 checkmate)]
+"""
 function chCheck(game_state::Array)
 
     return [0, 0]
 
 end # function
 
+"""
+    chFlip!(game_state::Array)
+
+Modifies game_state to be as if player 1 were player 2 with the piece locations flipped vertically.
+Deepcopy game_state before running if you wish to preserve the previous state.
+"""
 function chFlip!(game_state::Array)
 
     for piece in game_state
@@ -110,6 +159,11 @@ function chFlip!(game_state::Array)
 
 end # function
 
+"""
+    chFlip!(moves::Array{Array{Int64, 1}})
+
+Flips every the vertical element of each move.
+"""
 function chFlip!(moves::Array{Array{Int64, 1}})
 
     for move in moves
@@ -119,9 +173,11 @@ function chFlip!(moves::Array{Array{Int64, 1}})
 
 end # function
 
-# Get all POSSIBLE VALID moves the computer can make
-# Computer always assumes it is on bottom
-# NEED TO IMPLEMENT SYSTEM FOR FINDING ALL HUMAN MOVES
+"""
+    chMoves(game_state::Array)
+
+Gets all possible valid moves player 1 (on the bottom) can make.
+"""
 function chMoves(game_state::Array)
 
     # Different numbers in the piece type indicate pieces
@@ -212,6 +268,15 @@ function chMoves(game_state::Array)
 
 end # function
 
+"""
+    chIsValidPlay(game_state, play)
+
+This checks a specific to see if its valid given the current game_state.
+This check the following:
+In bounds (1 - 8),
+Not going through other pieces (except when a knight),
+That the piece being landed on is not the same colour as piece it is.
+"""
 function chIsValidPlay(game_state::Array, play::Array{Array{Int64, 1}, 1})
 
     piece = [i for i in game_state if i[1] == play[1]]
@@ -255,6 +320,13 @@ function chIsValidPlay(game_state::Array, play::Array{Array{Int64, 1}, 1})
 
 end # function
 
+"""
+    chGetPointsBetween(play::Array{Array{Int64, 1}, 1})
+
+Gets the points between two points as per movement in chess,
+i.e. along diagonals.
+N/A when a knight
+"""
 function chGetPointsBetween(play::Array{Array{Int64, 1}, 1})
 
     diff_x = play[2][1] - play[1][1]
@@ -279,8 +351,14 @@ function chGetPointsBetween(play::Array{Array{Int64, 1}, 1})
 
 end # function
 
-# Fun little visual representation of the board
-function chShowBoard(game_state)
+"""
+    chShowBoard(game_state::Array)
+
+Displays a visualisation of the board.
+Doesn't discriminate between piece types but for each player.
+Board is flipped vertically in display (y increases as you move down).
+"""
+function chShowBoard(game_state::Array)
 
     println("\nCurrent State: ")
 
@@ -305,8 +383,14 @@ function chShowBoard(game_state)
 
 end # function
 
-# Read in a player's input into the code
-function chPlayHuman(game_state)
+"""
+    chPlayHuman!(game_state::Array)
+
+Takes a play from a human and parses it.
+We assume the player makes legal plays (so we don't chekc it's valid).
+This does not return anything, just modifies game_state
+"""
+function chPlayHuman!(game_state::Array)
     # Human is ALWAYS player 2
 
     println("Format: CurrentCoordX,CurrentCoordY,ToCoordX,ToCoordY [no spaces!]")
@@ -326,8 +410,6 @@ function chPlayHuman(game_state)
             break
         end
     end
-
-    return game_state
 
 end # function
 
