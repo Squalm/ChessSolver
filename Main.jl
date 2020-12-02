@@ -121,7 +121,7 @@ end # function
 
 Returns the score of the current game_state (for white).
 ```
-Scores
+Scores:
 Pawn -> 1
 Bishop -> 3
 Knight -> 3
@@ -301,9 +301,9 @@ function chMoves(game_state::Array)
 
             end # if
 
-        end # for
+        end # if
 
-    end # if
+    end # for
 
     valid_bool = [chIsValidPlay(game_state, move) for move in moves]
     valid = [moves[i] for i in range(1, length = length(moves)) if valid_bool[i]]
