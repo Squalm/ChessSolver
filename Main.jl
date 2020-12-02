@@ -117,6 +117,30 @@ function chTake!(game_state::Array, loc::Array{Int64, 1})
 end # function
 
 """
+    chScore(game_state::Array)
+
+Returns the score of the current game_state (for white).
+```
+Scores
+Pawn -> 1
+Bishop -> 3
+Knight -> 3
+Rook -> 4
+Queen -> 8
+King -> 100
+```
+"""
+function chScore(game_state::Array)
+
+    for piece in game_state
+
+        
+
+    end # for
+
+end # function
+
+"""
     chCheck(game_state::Array)
 
 --- INCOMPLETE ---\n
