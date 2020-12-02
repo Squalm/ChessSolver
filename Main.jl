@@ -132,11 +132,42 @@ King -> 100
 """
 function chScore(game_state::Array)
 
+    score = 0
     for piece in game_state
 
-        
+        if piece[3] == 1
+            if piece[2][1] == 1
+                score += 1
+            elseif piece[2][1] == 2
+                score += 4
+            elseif piece[2][1] == 3
+                score += 3
+            elseif piece[2][1] == 4
+                score += 3
+            elseif piece[2][1] == 5
+                score += 8
+            elseif piece[2][1] == 6
+                score += 100
+            end # if
+        else
+            if piece[2][1] == 1
+                score -= 1
+            elseif piece[2][1] == 2
+                score -= 4
+            elseif piece[2][1] == 3
+                score -= 3
+            elseif piece[2][1] == 4
+                score -= 3
+            elseif piece[2][1] == 5
+                score -= 8
+            elseif piece[2][1] == 6
+                score -= 100
+            end # if
+        end # if
 
     end # for
+
+    return score
 
 end # function
 
