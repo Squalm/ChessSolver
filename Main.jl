@@ -9,33 +9,28 @@ This MODIFIES `game_state` so you should pass a deepcopy of `game_state`.
 function chSearch(game_state::Array)
 
     moves = chMoves(game_state)
+    states = []
     for move in moves
-        new_state = chMakePlay(game_state, move)
-        # If human is in check in the scenario, this is an optimal move
-        if chCheck(new_state)[2] == 2
-
-            return move
-
-        else
-
-            # human's turn
-            flip_state = deepcopy(new_state)
-            chFlip!(flip_state)
-            human_moves = chMoves(flip_state)
-
-        end # if
+        state = deepcopy(game_state)
+        chMakePlay!(state, move)
+        push!(states, state)
     end # for
+    scores = Dict()
+    for i in range(1, length = length(states))
+        scores[chScore(states[i])] = moves[i]
+    end # for
+    println(scores)
 
 end # function
 
 """
-    chMakePlay(game_state::Array, play::Array{Array{Int64, 1}})
+    chMakePlay!(game_state::Array, play::Array{Array{Int64, 1}})
 
 This function modifies the `game_state` for when the computer makes a play.
 It can be used to modify the `game_state` once the optimal move is found.
 chMakePlay() uses chTake! so it doesn't need to be used elsewhere.
 """
-function chMakePlay(game_state::Array, play::Array{Array{Int64, 1}, 1})
+function chMakePlay!(game_state::Array, play::Array{Array{Int64, 1}, 1})
 
     chTake!(game_state, play[2])
 
@@ -48,7 +43,7 @@ function chMakePlay(game_state::Array, play::Array{Array{Int64, 1}, 1})
 
     end # for
 
-    return game_state
+    return nothing
 
 end # function
 
@@ -63,7 +58,7 @@ function chResolve(game_state::Array)
     copy_state = deepcopy(game_state)
     optimal_move = chSearch(copy_state)
 
-    new_state = chMakePlay(game_state, optimal_move)
+    chMakePlay!(game_state, optimal_move)
 
     return new_state
 
@@ -500,4 +495,6 @@ game_state = [
 
 println("BEEP BOOP")
 # chShowBoard(game_state)
-chMoves(game_state)
+# chMoves(game_state)
+copy_state = deepcopy(game_state)
+chSearch(copy_state)
