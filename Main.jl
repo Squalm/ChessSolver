@@ -15,11 +15,14 @@ function chSearch(game_state::Array)
         chMakePlay!(state, move)
         push!(states, state)
     end # for
+
     scores = Dict()
     for i in range(1, length = length(states))
         scores[chScore(states[i])] = moves[i]
     end # for
-    println(scores)
+    println(maximum(scores))
+
+    
 
 end # function
 
@@ -302,7 +305,6 @@ function chMoves(game_state::Array)
 
     valid_bool = [chIsValidPlay(game_state, move) for move in moves]
     valid = [moves[i] for i in range(1, length = length(moves)) if valid_bool[i]]
-    println(valid)
 
     return valid
 
