@@ -6,7 +6,7 @@ Recursive search to find move with best score. Searches `depth` deep.
 This MODIFIES `game_state` so you should pass a deepcopy of `game_state`.
 (The name is not `chSearch!` because it returns an optimal move not a `game_state`)
 """
-function chSearch(game_state::Array, depth::Int64)
+function chSearch(game_state::Array{Array{Any, 1}, 1}, depth::Int64)
 
     if depth == 0
         return [0]
@@ -30,7 +30,10 @@ function chSearch(game_state::Array, depth::Int64)
     # Go deep
     println(string(depth), ": ", string(length(states)))
     for i in range(1, length = length(states))
-        push!(scores[i], chSearch(deepcopy(states[i]), depth - 1))
+        deepen = deepcopy(states[i])
+        # We flip to easily mimic the human moves
+        chFlip!(deepen)
+        push!(scores[i], chSearch(deepen, depth - 1))
     end # for
 
     return scores
@@ -511,4 +514,4 @@ println("BEEP BOOP")
 # chShowBoard(game_state)
 # chMoves(game_state)
 copy_state = deepcopy(game_state)
-println(chSearch(copy_state, 2))
+println(chSearch(copy_state, 2)[1])
