@@ -1,13 +1,18 @@
 """
-    chSearch(game_state::Array)
+    chSearch(game_state::Array, depth::Int64)
 
 --- INCOMPLETE ---\n
-Recursive search to find the optimal move.
+Recursive search to find move with best score. Searches `depth` deep.
 This MODIFIES `game_state` so you should pass a deepcopy of `game_state`.
 (The name is not `chSearch!` because it returns an optimal move not a `game_state`)
 """
-function chSearch(game_state::Array)
+function chSearch(game_state::Array, depth::Int64)
 
+    if depth == 0
+        return [0]
+    end # if
+
+    # Get all possible states from here
     moves = chMoves(game_state)
     states = []
     for move in moves
@@ -16,13 +21,19 @@ function chSearch(game_state::Array)
         push!(states, state)
     end # for
 
-    scores = Dict()
+    # Get the scores for all those states
+    scores = []
     for i in range(1, length = length(states))
-        scores[chScore(states[i])] = moves[i]
+        push!(scores, [chScore(states[i]), moves[i]])
     end # for
-    println(maximum(scores))
 
-    
+    # Go deep
+    println(string(depth), ": ", string(length(states)))
+    for i in range(1, length = length(states))
+        push!(scores[i], chSearch(deepcopy(states[i]), depth - 1))
+    end # for
+
+    return scores
 
 end # function
 
@@ -106,7 +117,8 @@ function chTake!(game_state::Array, loc::Array{Int64, 1})
 
     for piece in range(1, length = length(game_state))
         if game_state[piece][1] == loc
-            pop!(game_state, piece)
+            deleteat!(game_state, piece)
+            break
         end # if
     end # for
 
@@ -499,4 +511,4 @@ println("BEEP BOOP")
 # chShowBoard(game_state)
 # chMoves(game_state)
 copy_state = deepcopy(game_state)
-chSearch(copy_state)
+println(chSearch(copy_state, 2))
