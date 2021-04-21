@@ -28,8 +28,10 @@ function chSearch(game_state::Array{Array{Any, 1}, 1}, depth::Int64)
     end # for
 
     # Go deep
-    println(string(depth), ": ", string(length(states)))
-    for i in range(1, length = length(states))
+    if depth > 2
+        println(string(depth), ": ", string(length(states)))
+    end # if
+    Threads.@threads for i in range(1, length = length(states))
         deepen = deepcopy(states[i])
         # We flip to easily mimic the human moves
         chFlip!(deepen)
@@ -514,4 +516,4 @@ println("BEEP BOOP")
 # chShowBoard(game_state)
 # chMoves(game_state)
 copy_state = deepcopy(game_state)
-println(chSearch(copy_state, 2)[1])
+chSearch(copy_state, 1)
